@@ -1,0 +1,38 @@
+const int speakerPin = 3; // The pin connected to speaker
+const int motionSensorPin = 6; // The pin connected to motion sensor
+const int desiredFrequency = 4000; // Desired frequency in Hertz (adjust as needed)
+const long duration = 100; // Duration in milliseconds
+const long pauseDuration = 500; // Pause duration in milliseconds
+
+void setup() {
+  pinMode(speakerPin, OUTPUT);
+}
+
+void loop() {
+  // Check if motion is detected
+  if (digitalRead(motionSensorPin) == HIGH) {
+    playTone();
+    //delay(pauseDuration);
+  }
+}
+
+void playTone() {
+  // Calculate the period (in microseconds) of the desired frequency
+  long periodMicroseconds = 1000000 / desiredFrequency;
+
+  // Calculate the half-period (in microseconds)
+  long halfPeriodMicroseconds = periodMicroseconds / 2;
+
+  // Generate the square wave for the desired duration
+  unsigned long startTime = millis();
+  while (millis() - startTime < duration) {
+    // Turn the speaker on for half the period
+    digitalWrite(speakerPin, HIGH);
+    delayMicroseconds(halfPeriodMicroseconds);
+
+    // Turn the speaker off for the other half of the period
+    digitalWrite(speakerPin, LOW);
+    delayMicroseconds(halfPeriodMicroseconds);
+  }
+  delay(pauseDuration);
+}
